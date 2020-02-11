@@ -39,8 +39,10 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = "${element(aws_subnet.public_subnet.*.id, 0)}"
   depends_on    = ["aws_internet_gateway.ig"]
 
+for_each = var.availability_zones
+
   tags = {
-    Name        = "${var.environment}-${element(var.availability_zones, count.index)}-nat"
+    Name        = "${var.environment}-${each.value}-nat"
     Environment = "${var.environment}"
   }
 }
