@@ -2,7 +2,7 @@
 Variables used across all modules
 ======*/
 locals {
-  production_availability_zones = ["eu-west-2a", "eu-west-2b"]
+  sandbox_availability_zones = ["eu-west-2a", "eu-west-2b"]
 }
 
 provider "aws" {
@@ -10,11 +10,11 @@ provider "aws" {
   profile = "ddcops-sandbox"
 }
 
-resource "aws_key_pair" "key" {
-  key_name = "sandbox_key"
-  // get this from a pki somewhere
-  // public_key = file("sandbox_key.pub")
-}
+//resource "aws_key_pair" "key" {
+//  key_name = "sandbox_key"
+//  // get this from a pki somewhere
+//  public_key = file("sandbox_key.pub")
+//}
 
 module "networking" {
   source               = "./modules/networking"
