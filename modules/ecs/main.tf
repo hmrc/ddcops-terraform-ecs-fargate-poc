@@ -65,7 +65,7 @@ data "template_file" "db_migrate_task" {
 
 resource "aws_ecs_task_definition" "db_migrate" {
   family                   = "${var.environment}_db_migrate"
-  container_definitions    = "data.template_file.db_migrate_task.rendered"
+  container_definitions    = data.template_file.db_migrate_task.rendered
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = "256"
@@ -252,7 +252,7 @@ resource "aws_ecs_service" "web" {
   }
 
   load_balancer {
-    target_group_arn = "aws_alb_target_group.alb_target_group.arn"
+    target_group_arn = aws_alb_target_group.alb_target_group.arn
     container_name   = "web"
     container_port   = "80"
   }
@@ -291,18 +291,18 @@ resource "aws_appautoscaling_policy" "up" {
   scalable_dimension      = "ecs:service:DesiredCount"
 
 
-  step_scaling_policy_configuration = {
+  step_scaling_policy_configuration {
     adjustment_type         = "ChangeInCapacity"
     cooldown                = 60
     metric_aggregation_type = "Maximum"
 
-    step_adjustment = {
+    step_adjustment {
       metric_interval_lower_bound = 0
       scaling_adjustment = 1
     }
   }
 
-  depends_on = ["aws_appautoscaling_target.target"]
+  depends_on = [aws_appautoscaling_target.target]
 }
 
 resource "aws_appautoscaling_policy" "down" {
@@ -311,18 +311,18 @@ resource "aws_appautoscaling_policy" "down" {
   resource_id             = "service/${aws_ecs_cluster.cluster.name}/${aws_ecs_service.web.name}"
   scalable_dimension      = "ecs:service:DesiredCount"
 
-  step_scaling_policy_configuration = {
+  step_scaling_policy_configuration {
     adjustment_type         = "ChangeInCapacity"
     cooldown                = 60
     metric_aggregation_type = "Maximum"
 
-    step_adjustment = {
+    step_adjustment {
       metric_interval_lower_bound = 0
       scaling_adjustment = -1
     }
   }
 
-  depends_on = ["aws_appautoscaling_target.target"]
+  depends_on = [aws_appautoscaling_target.target]
 }
 
 /* metric used for auto scale */
@@ -341,6 +341,6 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
     ServiceName = aws_ecs_service.web.name
   }
 
-  alarm_actions = ["aws_appautoscaling_policy.up.arn"]
-  ok_actions    = ["aws_appautoscaling_policy.down.arn"]
+  alarm_actions = [aws_appautoscaling_policy.up.arn]
+  ok_actions    = [aws_appautoscaling_policy.down.arn]
 }
