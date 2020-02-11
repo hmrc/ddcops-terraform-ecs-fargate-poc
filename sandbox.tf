@@ -43,7 +43,7 @@ module "ecs" {
   source             = "./modules/ecs"
   environment        = "sandbox"
   vpc_id             = module.networking.vpc_id
-  availability_zones = local.production_availability_zones
+  availability_zones = local.sandbox_availability_zones
   repository_name    = "deskpro/sandbox"
   subnets_ids        = [module.networking.private_subnets_id]
   public_subnet_ids  = [module.networking.public_subnets_id]
