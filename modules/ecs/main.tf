@@ -244,7 +244,7 @@ resource "aws_ecs_service" "web" {
   cluster =       "${aws_ecs_cluster.cluster.id}"
 
 
-  network_configuration {
+  network_configuration = {
     security_groups = ["${var.security_groups_ids}", "${aws_security_group.ecs_service.id}"]
     subnets         = ["${var.subnets_ids}"]
   }
@@ -289,12 +289,12 @@ resource "aws_appautoscaling_policy" "up" {
   scalable_dimension      = "ecs:service:DesiredCount"
 
 
-  step_scaling_policy_configuration {
+  step_scaling_policy_configuration = {
     adjustment_type         = "ChangeInCapacity"
     cooldown                = 60
     metric_aggregation_type = "Maximum"
 
-    step_adjustment {
+    step_adjustment = {
       metric_interval_lower_bound = 0
       scaling_adjustment = 1
     }
@@ -309,12 +309,12 @@ resource "aws_appautoscaling_policy" "down" {
   resource_id             = "service/${aws_ecs_cluster.cluster.name}/${aws_ecs_service.web.name}"
   scalable_dimension      = "ecs:service:DesiredCount"
 
-  step_scaling_policy_configuration {
+  step_scaling_policy_configuration = {
     adjustment_type         = "ChangeInCapacity"
     cooldown                = 60
     metric_aggregation_type = "Maximum"
 
-    step_adjustment {
+    step_adjustment = {
       metric_interval_lower_bound = 0
       scaling_adjustment = -1
     }

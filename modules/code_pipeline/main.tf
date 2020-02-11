@@ -105,7 +105,7 @@ resource "aws_codepipeline" "pipeline" {
       version          = "1"
       output_artifacts = ["source"]
 
-      configuration {
+      configuration = {
         Owner      = "heavyengineer"
         Repo       = "deskpro_sandbox"
         Branch     = "deskpro"
@@ -125,7 +125,7 @@ resource "aws_codepipeline" "pipeline" {
       input_artifacts  = ["source"]
       output_artifacts = ["imagedefinitions"]
 
-      configuration {
+      configuration = {
         ProjectName = "deskpro-codebuild"
       }
     }
@@ -142,7 +142,7 @@ resource "aws_codepipeline" "pipeline" {
       input_artifacts = ["imagedefinitions"]
       version         = "1"
 
-      configuration {
+      configuration = {
         ClusterName = "${var.ecs_cluster_name}"
         ServiceName = "${var.ecs_service_name}"
         FileName    = "imagedefinitions.json"
