@@ -82,7 +82,7 @@ resource "random_id" "target_group_sufix" {
 }
 
 resource "aws_alb_target_group" "alb_target_group" {
-  name     = "${var.environment{-alb-target-group-random_id.target_group_sufix.hex"
+  name     = "${var.environment}-alb-target-group-random_id.target_group_sufix.hex"
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
@@ -232,8 +232,8 @@ resource "aws_security_group" "ecs_service" {
 
 /* Simply specify the family to find the latest ACTIVE revision in that family */
 data "aws_ecs_task_definition" "web" {
-  task_definition = "aws_ecs_task_definition.web.family}"
-  depends_on = [ "aws_ecs_task_definition.web" ]
+  task_definition = "aws_ecs_task_definition.web.family"
+  depends_on = [ aws_ecs_task_definition.web ]
 }
 
 resource "aws_ecs_service" "web" {
