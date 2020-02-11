@@ -48,9 +48,13 @@ module "ecs" {
   subnets_ids        = [module.networking.private_subnets_id]
   public_subnet_ids  = [module.networking.public_subnets_id]
   security_groups_ids = [
-    module.networking.security_groups_ids,
-    module.rds.db_access_sg_id,
+    "module.rds.db_access_sg_id",
   ]
+#fixme
+  #security_groups_ids = [
+  #  "module.networking.security_groups_ids",
+  #  "module.rds.db_access_sg_id",
+  #]
   database_endpoint = module.rds.rds_address
   database_name     = var.sandbox_database_name
   database_username = var.sandbox_database_username
