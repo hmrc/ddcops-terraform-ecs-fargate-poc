@@ -30,7 +30,7 @@ ECS task definitions
 
 /* the task definition for the web service */
 data "template_file" "web_task" {
-  template = file("path.module/tasks/web_task_definition.json")
+  template = file("${path.module}/tasks/web_task_definition.json")
 
   vars = {
     image           = aws_ecr_repository.openjobs_app.repository_url
@@ -53,7 +53,7 @@ resource "aws_ecs_task_definition" "web" {
 
 /* the task definition for the db migration */
 data "template_file" "db_migrate_task" {
-  template = file("path.module/tasks/db_migrate_task_definition.json")
+  template = file("${path.module}/tasks/db_migrate_task_definition.json")
 
   vars = {
     image           = aws_ecr_repository.openjobs_app.repository_url
@@ -70,8 +70,8 @@ resource "aws_ecs_task_definition" "db_migrate" {
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "512"
-  execution_role_arn       = "aws_iam_role.ecs_execution_role.arn"
-  task_role_arn            = "aws_iam_role.ecs_execution_role.arn"
+  execution_role_arn       = aws_iam_role.ecs_execution_role.arn
+  task_role_arn            = aws_iam_role.ecs_execution_role.arn
 }
 
 /*====
@@ -184,7 +184,7 @@ data "aws_iam_policy_document" "ecs_service_policy" {
 /* ecs service scheduler role */
 resource "aws_iam_role_policy" "ecs_service_role_policy" {
   name   = "ecs_service_role_policy"
-  #policy = file("path.module}/policies/ecs-service-role.json")
+  #policy = file("${path.module}/policies/ecs-service-role.json")
   policy = data.aws_iam_policy_document.ecs_service_policy.json
   role   = aws_iam_role.ecs_role.id
 }
@@ -192,11 +192,11 @@ resource "aws_iam_role_policy" "ecs_service_role_policy" {
 /* role that the Amazon ECS container agent and the Docker daemon can assume */
 resource "aws_iam_role" "ecs_execution_role" {
   name               = "ecs_task_execution_role"
-  assume_role_policy = file("path.module}/policies/ecs-task-execution-role.json")
+  assume_role_policy = file("${path.module}/policies/ecs-task-execution-role.json")
 }
 resource "aws_iam_role_policy" "ecs_execution_role_policy" {
   name   = "ecs_execution_role_policy"
-  policy = file("path.module}/policies/ecs-execution-role-policy.json")
+  policy = file("${path.module}/policies/ecs-execution-role-policy.json")
   role   = aws_iam_role.ecs_execution_role.id
 }
 
@@ -246,7 +246,7 @@ resource "aws_ecs_service" "web" {
   cluster =       aws_ecs_cluster.cluster.id
 
 
-  network_configuration = {
+  network_configuration {
     security_groups = ["var.security_groups_ids", "aws_security_group.ecs_service.id"]
     subnets         = ["var.subnets_ids"]
   }
@@ -257,7 +257,7 @@ resource "aws_ecs_service" "web" {
     container_port   = "80"
   }
 
-  depends_on = ["aws_alb_target_group.alb_target_group"]
+  depends_on = [aws_alb_target_group.alb_target_group]
 }
 
 
@@ -271,7 +271,7 @@ resource "aws_iam_role" "ecs_autoscale_role" {
 }
 resource "aws_iam_role_policy" "ecs_autoscale_role_policy" {
   name   = "ecs_autoscale_role_policy"
-  policy = file("path.module/policies/ecs-autoscale-role-policy.json")
+  policy = file("${path.module}/policies/ecs-autoscale-role-policy.json")
   role   = aws_iam_role.ecs_autoscale_role.id
 }
 
