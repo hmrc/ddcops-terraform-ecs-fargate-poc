@@ -34,7 +34,7 @@ module "rds" {
   database_name     = var.sandbox_database_name
   database_username = var.sandbox_database_username
   database_password = var.sandbox_database_password
-  subnet_ids        = [module.networking.private_subnets_id]
+  subnet_ids        = module.networking.private_subnets_id
   vpc_id            = module.networking.vpc_id
   instance_class    = "db.t2.micro"
 }
@@ -45,8 +45,8 @@ module "ecs" {
   vpc_id             = module.networking.vpc_id
   availability_zones = local.sandbox_availability_zones
   repository_name    = "deskpro/sandbox"
-  subnets_ids        = [module.networking.private_subnets_id]
-  public_subnet_ids  = [module.networking.public_subnets_id]
+  subnets_ids        = module.networking.private_subnets_id
+  public_subnet_ids  = module.networking.public_subnets_id
   security_groups_ids = [
     "module.rds.db_access_sg_id",
   ]
