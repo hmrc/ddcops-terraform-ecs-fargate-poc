@@ -82,7 +82,8 @@ resource "random_id" "target_group_sufix" {
 }
 
 resource "aws_alb_target_group" "alb_target_group" {
-  name     = "${var.environment}-alb-target-group-random_id.target_group_sufix.hex"
+  #name     = "${var.environment}-alb-target-group-random_id.target_group_sufix.hex"
+  name     = substr("${var.environment}-alb-target-group-random_id.target_group_sufix.hex", 0, 32)
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
