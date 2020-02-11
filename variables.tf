@@ -6,20 +6,20 @@ variable "region" {
 environment specific variables
 ======*/
 
-variable "production_database_name" {
-  description = "The database name for Production"
+variable "sandbox_database_name" {
+  description = "The database name for sandbox"
 }
 
-variable "production_database_username" {
-  description = "The username for the Production database"
+variable "sandbox_database_username" {
+  description = "The username for the sandbox database"
 }
 
-variable "production_database_password" {
-  description = "The user password for the Production database"
+variable "sandbox_database_password" {
+  description = "The user password for the sandbox database"
 }
 
-variable "production_secret_key_base" {
-  description = "The Rails secret key for production"
+variable "sandbox_secret_key_base" {
+  description = "The Rails secret key for sandbox"
 }
 
 variable "domain" {

@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "source" {
-  bucket        = "openjobs-experiment-source"
+  bucket        = "deskpro-sandbox"
   acl           = "private"
   force_destroy = true
 }
@@ -106,9 +106,9 @@ resource "aws_codepipeline" "pipeline" {
       output_artifacts = ["source"]
 
       configuration {
-        Owner      = "duduribeiro"
-        Repo       = "openjobs_experiment"
-        Branch     = "master"
+        Owner      = "heavyengineer"
+        Repo       = "deskpro_sandbox"
+        Branch     = "deskpro"
       }
     }
   }
@@ -126,7 +126,7 @@ resource "aws_codepipeline" "pipeline" {
       output_artifacts = ["imagedefinitions"]
 
       configuration {
-        ProjectName = "openjobs-codebuild"
+        ProjectName = "deskpro-codebuild"
       }
     }
   }
