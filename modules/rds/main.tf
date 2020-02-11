@@ -59,7 +59,7 @@ resource "aws_security_group" "rds_sg" {
 }
 
 resource "aws_db_instance" "rds" {
-  identifier             = "var.environment-database"
+  identifier             = "${var.environment}-database"
   allocated_storage      = var.allocated_storage
   engine                 = "postgres"
   engine_version         = "9.6.6"
