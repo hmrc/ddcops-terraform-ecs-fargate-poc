@@ -2,7 +2,21 @@
 Variables used across all modules
 ======*/
 locals {
+  #sandbox_availability_zones = ["eu-west-2a", "eu-west-2b"]
   sandbox_availability_zones = ["eu-west-2a", "eu-west-2b"]
+  #variable "sandbox_availability_zones" {
+  #  type = list(object({
+  #    a = string
+  #    b = stirng
+  #  }))
+  #  default = [
+  #    {
+  #      internal = 8300
+  #      external = 8300
+  #      protocol = "tcp"
+  #    }
+  #  ]
+  #}
 }
 
 provider "aws" {
@@ -23,7 +37,7 @@ module "networking" {
   public_subnets_cidr  = ["10.0.1.0/24", "10.0.2.0/24"]
   private_subnets_cidr = ["10.0.10.0/24", "10.0.20.0/24"]
   region               = var.region
-  availability_zones   = local.sandbox_availability_zones
+  availability_zones   = toset(local.sandbox_availability_zones)
   key_name             = "sandbox_key"
 }
 

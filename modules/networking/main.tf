@@ -39,7 +39,7 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = element(aws_subnet.public_subnet.*.id, 0)
   depends_on    = [aws_internet_gateway.ig]
 
-for_each = var.availability_zones
+for_each = toset(var.availability_zones)
 
   tags = {
     Name        = "${var.environment}-${each.value}-nat"
@@ -105,7 +105,9 @@ resource "aws_route" "private_nat_gateway" {
   route_table_id         = aws_route_table.private.id
   destination_cidr_block = "0.0.0.0/0"
   for_each =  aws_nat_gateway.nat
-    nat_gateway_id         = aws_nat_gateway.nat[each.key]
+    #nat_gateway_id         = aws_nat_gateway.nat[each.key]
+    #fixme, maybe. should this be using a set and each.key like this?
+    nat_gateway_id         = each.key
 }
 
 /* Route table associations */
