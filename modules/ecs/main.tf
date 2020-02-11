@@ -4,7 +4,7 @@ Cloudwatch Log Group
 resource "aws_cloudwatch_log_group" "openjobs" {
   name = "openjobs"
 
-  tags {
+  tags = {
     Environment = "${var.environment}"
     Application = "OpenJobs"
   }
@@ -120,7 +120,7 @@ resource "aws_security_group" "web_inbound_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags {
+  tags = {
     Name = "${var.environment}-web-inbound-sg"
   }
 }
@@ -130,7 +130,7 @@ resource "aws_alb" "alb_openjobs" {
   subnets         = ["${var.public_subnet_ids}"]
   security_groups = ["${var.security_groups_ids}", "${aws_security_group.web_inbound_sg.id}"]
 
-  tags {
+  tags = {
     Name        = "${var.environment}-alb-openjobs"
     Environment = "${var.environment}"
   }
@@ -224,7 +224,7 @@ resource "aws_security_group" "ecs_service" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags {
+  tags = {
     Name        = "${var.environment}-ecs-service-sg"
     Environment = "${var.environment}"
   }
