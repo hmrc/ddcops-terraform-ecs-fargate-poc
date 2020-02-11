@@ -128,8 +128,10 @@ resource "aws_security_group" "web_inbound_sg" {
 
 resource "aws_alb" "alb_openjobs" {
   name            = "${var.environment}-alb-openjobs"
-  subnets         = ["var.public_subnet_ids"]
-  security_groups = ["var.security_groups_ids", "aws_security_group.web_inbound_sg.id"]
+  subnets         = var.public_subnet_ids
+#fixme
+  #security_groups = [var.security_groups_ids, aws_security_group.web_inbound_sg.id]
+  security_groups = var.security_groups_ids
 
   tags = {
     Name        = "${var.environment}-alb-openjobs"
